@@ -5,13 +5,13 @@ using namespace std;
 #include<stdlib.h>
 #include<string.h>
 #include <time.h>
+#include"stack.h"
+#include"tadLista.h"
+#include"tadEstrutura.h"
 
 #define NOMESARQDIR 16
 #define ITENSDIR
 
-#include"tadPilha.h"
-#include"tadLista.h"
-#include"tadEstrutura.h"
 
 void verificaArquivo(Bloco b, Bloco blocos_disco[], char nome_arq[], bool *flag, int *posb)
 {
@@ -520,7 +520,7 @@ int main()
                 pos_no_dir = buscaDiretorio(blocos_disco,dir_atual,comando);
                 pos_bloco = dir_atual.itens[pos_no_dir].posi;
                 if(blocos_disco[pos_bloco].dir.tl > 0)
-                    puts("Nao e possivel excluir o diretorio ele não esta vazio");
+                    puts("Nao e possivel excluir o diretorio ele nï¿½o esta vazio");
                 else
                 {
                     remanejaItensDir(dir_atual,pos);
@@ -586,7 +586,7 @@ int main()
                                 {
                                     pos_bloco_livre = retornaBlocoLivre(&lista_blivres);
                                     if(pos_bloco_livre == -1)
-                                        printf("Espaço de armazenamento cheio");
+                                        printf("Espaï¿½o de armazenamento cheio");
                                     else
                                     {
                                         strcpy(raiz.itens[raiz.tl].nomeitem, nomearquivo);
