@@ -1,6 +1,3 @@
-#ifndef TADESTRUTURA_H_INCLUDED
-#define TADESTRUTURA_H_INCLUDED
-
 struct IS
 {
     unsigned int posi[5];
@@ -58,8 +55,8 @@ void inicializaBlocos(Bloco vet[], int n, Lista *l, Diretorio *raiz)
 
     for(int i = 0; i < n; i++)
         vet[i].tipo = 'F';
-    // Inserindo o registro com nome boot no diretório raiz
-    b4 = retornaBlocoLivre(&(*l));
+    // Inserindo o registro com nome boot no diretï¿½rio raiz
+    b4 = retornaBlocoLivre(*l);
     strcpy((*raiz).itens[(*raiz).tl].nomeitem, "/boot");
     (*raiz).itens[(*raiz).tl].posi = b4;
     (*raiz).tl++;
@@ -73,14 +70,14 @@ void inicializaBlocos(Bloco vet[], int n, Lista *l, Diretorio *raiz)
     vet[b4].ino.it.tl = 0;
     strcpy(vet[b4].ino.permissao, "----------");
     vet[b4].ino.tl=0;
-    bloco = retornaBlocoLivre(&(*l));
+    bloco = retornaBlocoLivre(*l);
     vet[b4].ino.posi[vet[b4].ino.tl++] = bloco;
 
     vet[bloco].tipo = 'A';
     strcpy(vet[bloco].dir.nome, "/raiz/boot");
     vet[bloco].dir.tl = 0;
     strcpy(vet[bloco].dir.itens[vet[bloco].dir.tl].nomeitem, "/kernel");
-    bloco3 = retornaBlocoLivre(&(*l));
+    bloco3 = retornaBlocoLivre(*l);
     vet[bloco].dir.itens[vet[bloco].dir.tl].posi = bloco3;
     vet[bloco].dir.tl++;
 
@@ -93,19 +90,19 @@ void inicializaBlocos(Bloco vet[], int n, Lista *l, Diretorio *raiz)
     vet[bloco3].ino.it.tl = 0;
     strcpy(vet[bloco3].ino.permissao, "----------");
     vet[bloco3].ino.tl=0;
-    b4 = retornaBlocoLivre(&(*l));
+    b4 = retornaBlocoLivre(*l);
     vet[bloco3].ino.posi[vet[bloco3].ino.tl++] = b4;
     vet[b4].tipo = 'A';
 
-    b4 = retornaBlocoLivre(&(*l));
+    b4 = retornaBlocoLivre(*l);
     vet[bloco3].ino.posi[vet[bloco3].ino.tl++] = b4;
     vet[b4].tipo = 'A';
 
-    b4 = retornaBlocoLivre(&(*l));
+    b4 = retornaBlocoLivre(*l);
     vet[bloco3].ino.posi[vet[bloco3].ino.tl++] = b4;
     vet[b4].tipo = 'A';
 
-    b4 = retornaBlocoLivre(&(*l));
+    b4 = retornaBlocoLivre(*l);
     vet[bloco3].ino.posi[vet[bloco3].ino.tl++] = b4;
     vet[b4].tipo = 'L';
 
@@ -175,4 +172,3 @@ Inode criaInode(int tamanho, char perm[])
     ino.tl=0;
     ino.is.tl=ino.id.tl=ino.it.tl=0;
 }
-#endif // TADESTRUTURA_H_INCLUDED

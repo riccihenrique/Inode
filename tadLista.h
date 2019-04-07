@@ -1,10 +1,8 @@
-#ifndef TADLISTA_H_INCLUDED
-#define TADLISTA_H_INCLUDED
 #define TF 3000
 
 struct No
 {
-    struct Pilha p;
+    struct Stack s;
 };
 
 struct Lista
@@ -13,62 +11,63 @@ struct Lista
     struct No posi[TF];
 };
 
-void insereLista(Lista *l, int valor)
+void insereLista(Lista &l, int valor)
 {
-    if(pilhaCheia((*l).posi[(*l).tl].p.topo))
+    if(isEmpty(l.posi[l.tl].s))
     {
         No aux;
-        inicializaPilha(&aux.p);
-        push(&aux.p, valor);
-        (*l).posi[++(*l).tl] = aux;
+        init(aux.s);
+        push(aux.s, valor);
+        l.posi[++l.tl] = aux;
     }
     else
-        push(&(*l).posi[(*l).tl].p, valor);
+        push(l.posi[l.tl].s, valor);
 }
 
-void inicializaLista(Lista *l, int tf)
+void inicializaLista(Lista &l, int tf)
 {
-    (*l).tf2 = (tf+1)/10;
-    (*l).tl = 0;
+    l.tf2 = (tf+1)/10;
+    l.tl = 0;
     No aux;
-    inicializaPilha(&aux.p);
-    (*l).posi[(*l).tl] = aux;
+    init(aux.s);
+    l.posi[l.tl] = aux;
 
     for(int i = 0; i < tf; i++)
-        insereLista(&(*l), i);
+        insereLista(l, i);
 }
 
-void retiraLista(Lista *l)
+void retiraLista(Lista &l)
 {
-    for(int i = 0; i < (*l).tl; i++)
-        (*l).posi[i] = (*l).posi[i+1];
-    (*l).tl--;
+    for(int i = 0; i < l.tl; i++)
+        l.posi[i] = l.posi[i+1];
+    l.tl--;
 }
 
-int retornaBlocoLivre(Lista *l)
+int retornaBlocoLivre(Lista &l)
 {
-    int pos=-1;
-    if(!pilhaVazia((*l).posi[0].p.topo))
+    int pos = -1;
+    if(!isEmpty(l.posi[0].s))
     {
-        pos = pop(&((*l).posi[0].p));
-        if(pilhaVazia((*l).posi[0].p.topo))
-           retiraLista(&(*l));
-        return pos;
-    }
+        pos = pop((l.posi[0].s));
+        if(isEmpty(l.posi[0].s))
+           retiraLista(l);
+    }    
+    return pos;
 }
 
 void exibeLista(Lista l)
 {
     for(int i = 0; i <= l.tl; i++)
-        exibePilha(l.posi[i].p);
+        show(l.posi[i].s);
 }
 
-int verificaBlocoLivre(Lista l, unsigned int pos)
+int verificaBlocoLivre(Lista l, int pos)
 {
-    int num_p = -1; bool achou = false;
+    int num_p = -1;
+    bool achou = false;
     for(int i = 0; i <= l.tl && !achou; i++)
     {
-        if(procuraBloco(l.posi[i].p, pos))
+        if(procuraBloco(l.posi[i].s, pos))
         {
             num_p = i;
             achou = true;
@@ -77,30 +76,28 @@ int verificaBlocoLivre(Lista l, unsigned int pos)
     return num_p;
 }
 
-bool danificaBloco(Lista *l, unsigned int pos_bloco)
+bool danificaBloco(Lista &l, int pos_bloco)
 {
-    unsigned int valor;
-    int pos_pilha = verificaBlocoLivre(*l, pos_bloco);
+    int valor;
+    int pos_pilha = verificaBlocoLivre(l, pos_bloco);
     if(pos_pilha != -1)
     {
         No backup, aux;
-        inicializaPilha(&aux.p);
-        backup = (*l).posi[pos_pilha];
-        while(!pilhaVazia(backup.p.topo))
+        init(aux.s);
+        backup = l.posi[pos_pilha];
+        while(!isEmpty(backup.s))
         {
-            valor = pop(&backup.p);
+            valor = pop(backup.s);
             if(valor != pos_bloco)
-                push(&aux.p, valor);
+                push(aux.s, valor);
         }
 
-        (*l).posi[pos_pilha] = aux;
-        if(pilhaVazia((*l).posi[pos_pilha].p.topo))
+        l.posi[pos_pilha] = aux;
+        if(isEmpty(l.posi[pos_pilha].s))
             if(pos_pilha == 0)
-                retiraLista(&(*l));
+                retiraLista(l);
         return true;
     }
     else
         return false;
 }
-
-#endif // TADLISTA_H_INCLUDED

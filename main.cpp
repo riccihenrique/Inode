@@ -1,39 +1,39 @@
-using namespace std;
-#include <iostream>
-#include<stdio.h>
+#include <stdio.h>
 #include <conio.h>
-#include<stdlib.h>
-#include<string.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
 #include <time.h>
-#include"stack.h"
-#include"tadLista.h"
-#include"tadEstrutura.h"
+#include <windows.h>
+#include "stack.h"
+#include "tadLista.h"
+#include "tadEstrutura.h"
 
 #define NOMESARQDIR 16
 #define ITENSDIR
 
 
-void verificaArquivo(Bloco b, Bloco blocos_disco[], char nome_arq[], bool *flag, int *posb)
+void verificaArquivo(Bloco b, Bloco blocos_disco[], char nome_arq[], bool &flag, int &posb)
 {
     int pos, i;
-    while(b.tipo != 'L' && b.tipo != 'B' && !(*flag))
+    while(b.tipo != 'L' && b.tipo != 'B' && !flag)
     {
         if(b.tipo == 'D')
         {
             pos = b.ino.posi[0];
             b = blocos_disco[pos];
-            verificaArquivo(b, blocos_disco, nome_arq, &(*flag), &(*posb));
+            verificaArquivo(b, blocos_disco, nome_arq, flag, posb);
         }
         else
             if(b.tipo == 'I' || b.tipo == 'A')
             {
                 i = 0;
-                while(i < b.dir.tl && !(*flag))
+                while(i < b.dir.tl && !flag)
                 {
                     if(stricmp(b.dir.itens[i].nomeitem, nome_arq) == 0)
                     {
-                        (*posb) = b.dir.itens[i].posi;
-                        (*flag) = true;
+                        posb = b.dir.itens[i].posi;
+                        flag = true;
                     }
                     i++;
                 }
@@ -233,9 +233,7 @@ int main()
     Diretorio raiz;
     strcpy(raiz.nome, "/raiz");
     raiz.tl=0;
-
-
-
+    
     int n_blocos = 1000,tl=0, i, j, tam_bloco = 10, k;
     char num_blocos[2], caracter, navegacao[1000], comando[30],res,sair=0;
     bool exit, stop;
@@ -261,7 +259,7 @@ int main()
     Diretorio dir_atual;
 
     Lista lista_blivres;
-    inicializaLista(&lista_blivres, n_blocos);
+    inicializaLista(lista_blivres, n_blocos);
     inicializaBlocos(blocos_disco, n_blocos, &lista_blivres, &raiz);
     char nomearquivo[NOMESARQDIR],bytes[8];
     int tamanho, pos,pos_bloco_livre,pos_no_dir,pos_bloco;
@@ -328,7 +326,7 @@ int main()
                                     aux[j] = '\0';
 
                                     exit = false; k = -1;
-                                    verificaArquivo(b, blocos_disco, aux, &exit, &k);
+                                    verificaArquivo(b, blocos_disco, aux, exit, k);
                                     if(k != -1)
                                     {
                                         b = blocos_disco[k]; exit = false;
@@ -437,7 +435,7 @@ int main()
                         else
                         {
                             exit = false; k = -1;
-                            verificaArquivo(b, blocos_disco, aux, &exit, &k);
+                            verificaArquivo(b, blocos_disco, aux, exit, k);
                             if(k != -1)
                             {
                                 Bloco b = blocos_disco[k];
@@ -490,11 +488,11 @@ int main()
                     {
                         if(numeroBlocosLivres(blocos_disco,n_blocos) > 2)
                         {
-                            pos_bloco_livre = retornaBlocoLivre(&lista_blivres);
+                            pos_bloco_livre = retornaBlocoLivre(lista_blivres);
                             blocos_disco[pos_bloco_livre].tipo = 'D';
                             blocos_disco[pos_bloco_livre].ino = criaInode(10,"dRWXRWXRWX");
 
-                            pos = retornaBlocoLivre(&lista_blivres);
+                            pos = retornaBlocoLivre(lista_blivres);
                             blocos_disco[pos].tipo = 'A';
                             blocos_disco[pos].dir = criaDiretorio(pos,comando,dir_atual.posi,dir_atual.dir_raiz);
 
@@ -525,7 +523,7 @@ int main()
                 {
                     remanejaItensDir(dir_atual,pos);
                     ///inserir pos_bloco na lista de blocos livres
-                    insereLista(&lista_blivres,pos_bloco);
+                    insereLista(lista_blivres,pos_bloco);
                 }
 
             break;
@@ -546,7 +544,7 @@ int main()
                 {
                     pos = i;
 
-                    if(danificaBloco(&lista_blivres, pos))
+                    if(danificaBloco(lista_blivres, pos))
                     {
                         blocos_disco[pos].tipo = 'B';
                         printf("\nOk: O bloco %d foi danificado dentre os Blocos Livres!", i);
@@ -584,7 +582,7 @@ int main()
                             {
                                 if(numeroBlocosLivres(blocos_disco,n_blocos)>tamanho/10+1)
                                 {
-                                    pos_bloco_livre = retornaBlocoLivre(&lista_blivres);
+                                    pos_bloco_livre = retornaBlocoLivre(lista_blivres);
                                     if(pos_bloco_livre == -1)
                                         printf("Espa�o de armazenamento cheio");
                                     else
@@ -598,14 +596,14 @@ int main()
                                         while(blocos_disco[pos_bloco_livre].ino.tl < 5 && tamanho > 0)
                                         {
                                             tamanho-=10;
-                                            pos = retornaBlocoLivre(&lista_blivres);
+                                            pos = retornaBlocoLivre(lista_blivres);
                                             blocos_disco[pos_bloco_livre].ino.posi[blocos_disco[pos_bloco_livre].ino.tl++] = pos;
                                             blocos_disco[pos].tipo = 'A';
                                         }
 
                                         if(tamanho <= 0)
                                         {
-                                            pos = retornaBlocoLivre(&lista_blivres);
+                                            pos = retornaBlocoLivre(lista_blivres);
                                             blocos_disco[pos_bloco_livre].ino.posi[blocos_disco[pos_bloco_livre].ino.tl++] = pos;
                                             blocos_disco[pos].tipo = 'L';
                                         }
@@ -616,14 +614,14 @@ int main()
                                             while(blocos_disco[pos_bloco_livre].ino.is.tl < 5 && tamanho > 0)
                                             {
                                                 tamanho-=10;
-                                                pos = retornaBlocoLivre(&lista_blivres);
-                                                blocos_disco[pos_bloco_livre].ino.is.posi[blocos_disco[pos_bloco_livre].ino.is.tl++] = retornaBlocoLivre(&lista_blivres);
+                                                pos = retornaBlocoLivre(lista_blivres);
+                                                blocos_disco[pos_bloco_livre].ino.is.posi[blocos_disco[pos_bloco_livre].ino.is.tl++] = retornaBlocoLivre(lista_blivres);
                                                 blocos_disco[pos].tipo = 'A';
                                             }
 
                                             if(tamanho <= 0)
                                             {
-                                                pos = retornaBlocoLivre(&lista_blivres);
+                                                pos = retornaBlocoLivre(lista_blivres);
                                                 blocos_disco[pos_bloco_livre].ino.is.posi[blocos_disco[pos_bloco_livre].ino.is.tl++] = pos;
                                                 blocos_disco[pos].tipo = 'L';
                                             }
@@ -634,14 +632,14 @@ int main()
                                             while(blocos_disco[pos_bloco_livre].ino.id.tl < 10 && tamanho > 0)
                                             {
                                                 tamanho-=10;
-                                                pos = retornaBlocoLivre(&lista_blivres);
-                                                blocos_disco[pos_bloco_livre].ino.id.posi[blocos_disco[pos_bloco_livre].ino.id.tl++] = retornaBlocoLivre(&lista_blivres);
+                                                pos = retornaBlocoLivre(lista_blivres);
+                                                blocos_disco[pos_bloco_livre].ino.id.posi[blocos_disco[pos_bloco_livre].ino.id.tl++] = retornaBlocoLivre(lista_blivres);
                                                 blocos_disco[pos].tipo = 'A';
                                             }
 
                                             if(tamanho <= 0)
                                             {
-                                                pos = retornaBlocoLivre(&lista_blivres);
+                                                pos = retornaBlocoLivre(lista_blivres);
                                                 blocos_disco[pos_bloco_livre].ino.id.posi[blocos_disco[pos_bloco_livre].ino.id.tl++] = pos;
                                                 blocos_disco[pos].tipo = 'L';
                                             }
@@ -652,14 +650,14 @@ int main()
                                             while(blocos_disco[pos_bloco_livre].ino.it.tl < 10 && tamanho > 0)
                                             {
                                                 tamanho-=10;
-                                                pos = retornaBlocoLivre(&lista_blivres);
-                                                blocos_disco[pos_bloco_livre].ino.it.posi[blocos_disco[pos_bloco_livre].ino.it.tl++] = retornaBlocoLivre(&lista_blivres);
+                                                pos = retornaBlocoLivre(lista_blivres);
+                                                blocos_disco[pos_bloco_livre].ino.it.posi[blocos_disco[pos_bloco_livre].ino.it.tl++] = retornaBlocoLivre(lista_blivres);
                                                 blocos_disco[pos].tipo = 'A';
                                             }
 
                                             if(tamanho <= 0)
                                             {
-                                                pos = retornaBlocoLivre(&lista_blivres);
+                                                pos = retornaBlocoLivre(lista_blivres);
                                                 blocos_disco[pos_bloco_livre].ino.it.posi[blocos_disco[pos_bloco_livre].ino.it.tl++] = pos;
                                                 blocos_disco[pos].tipo = 'L';
                                             }
@@ -696,5 +694,6 @@ int main()
             default: puts("comando invalido");
         }
     }while(sair != 1);
+    system("pause");
 }
 

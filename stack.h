@@ -1,9 +1,9 @@
-#define TF 100
+#define TFS 100
 
 struct Stack
 {
     int top;
-    int stack[TF];
+    int stack[TFS];
 };
 
 void init(Stack &s)
@@ -13,7 +13,7 @@ void init(Stack &s)
 
 char isFull(Stack s)
 { 
-    return s.top == TF-1;
+    return s.top == TFS-1;
 }
 
 char isEmpty(Stack s)
@@ -38,7 +38,7 @@ int top(Stack s)
 
 void show(Stack s)
 {
-    while(!isEmpty(s.top))
+    while(!isEmpty(s))
         printf("%d\n",s.stack[s.top--]);
 }
 
@@ -46,9 +46,9 @@ bool procuraBloco(Stack s, int pos)
 {
     bool achou = false;
     int bloco;
-    while(!isEmpty(s.top) && !achou)
+    while(!isEmpty(s) && !achou)
     {
-        bloco = pop(&p);
+        bloco = pop(s);
         if(pos == bloco)
             achou = true;
     }
