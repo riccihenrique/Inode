@@ -1,43 +1,52 @@
-#ifndef TADPILHA_H_INCLUDED
-#define TADPILHA_H_INCLUDED
-#define TF 10
+#define TF 100
 
-struct Pilha
+struct Stack
 {
-    unsigned int topo;
-    unsigned int pilha[TF];
+    int top;
+    int stack[TF];
 };
 
-void inicializaPilha(Pilha *p)
-{ (*p).topo = -1; }
-
-void push(Pilha *p, int elem)
-{ (*p).pilha[++(*p).topo] = elem; }
-
-char pilhaCheia(int topo)
-{ return topo == TF-1; }
-
-char pilhaVazia(int topo)
-{ return topo == -1; }
-
-int pop(Pilha *p)
-{ return (*p).pilha[(*p).topo--]; }
-
-int top(Pilha p)
-{ return p.pilha[p.topo]; }
-
-void exibePilha(Pilha p)
-{
-    while(!pilhaVazia(p.topo))
-        printf("%d\n",p.pilha[p.topo--]);
-    printf("\n");
+void init(Stack &s)
+{ 
+    s.top = -1; 
 }
 
-bool procuraBloco(Pilha p, unsigned int pos)
+char isFull(Stack s)
+{ 
+    return s.top == TF-1;
+}
+
+char isEmpty(Stack s)
+{ 
+    return s.top == -1; 
+}
+
+void push(Stack &s, int info)
+{ 
+    s.stack[++s.top] = info;
+}
+
+int pop(Stack &s)
+{ 
+    return s.stack[s.top--]; 
+}
+
+int top(Stack s)
+{ 
+    return s.stack[s.top]; 
+}
+
+void showStack(Stack s)
+{
+    while(!isEmpty(s.top))
+        printf("%d\n",s.stack[s.top--]);
+}
+
+bool procuraBloco(Stack s, int pos)
 {
     bool achou = false;
-    unsigned int bloco;
-    while(!pilhaVazia(p.topo) && !achou)
+    int bloco;
+    while(!isEmpty(s.top) && !achou)
     {
         bloco = pop(&p);
         if(pos == bloco)
@@ -45,5 +54,3 @@ bool procuraBloco(Pilha p, unsigned int pos)
     }
     return achou;
 }
-
-#endif // TADPILHA_H_INCLUDED
