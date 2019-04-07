@@ -36,7 +36,7 @@ int top(Stack s)
     return s.stack[s.top]; 
 }
 
-void showStack(Stack s)
+void show(Stack s)
 {
     while(!isEmpty(s.top))
         printf("%d\n",s.stack[s.top--]);
