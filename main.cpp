@@ -12,7 +12,6 @@
 #define NOMESARQDIR 16
 #define ITENSDIR
 
-
 void verificaArquivo(Bloco b, Bloco blocos_disco[], char nome_arq[], bool &flag, int &posb)
 {
     int pos, i;

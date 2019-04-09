@@ -76,7 +76,7 @@ int verificaBlocoLivre(Lista l, int pos)
     return num_p;
 }
 
-bool danificaBloco(Lista &l, int pos_bloco)
+char danificaBloco(Lista &l, int pos_bloco)
 {
     int valor;
     int pos_pilha = verificaBlocoLivre(l, pos_bloco);
@@ -96,8 +96,8 @@ bool danificaBloco(Lista &l, int pos_bloco)
         if(isEmpty(l.posi[pos_pilha].s))
             if(pos_pilha == 0)
                 retiraLista(l);
-        return true;
+        return 1;
     }
     else
-        return false;
+        return 0;
 }
