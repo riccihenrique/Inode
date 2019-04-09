@@ -236,22 +236,13 @@ int main()
     int n_blocos = 1000,tl=0, i, j, tam_bloco = 10, k;
     char num_blocos[2], caracter, navegacao[1000], comando[30],res,sair=0;
     bool exit, stop;
-    printf("Numero de blocos desejados para a simulacao:");
-    fflush(stdin);
-    gets(num_blocos);
-    if(strlen(num_blocos) > 0)
-    {
-        n_blocos = atoi(num_blocos);
-        if(n_blocos < 100)
-        {
-            n_blocos = 1000;
-            puts("Definido o numero padrao: 1000");
-        }
-    }
-    else
+    printf("Numero de blocos desejados para a simulacao: ");
+    scanf("%d", &n_blocos);
+
+    if(n_blocos < 1000)
     {
         n_blocos = 1000;
-        puts("Definido o numero padrao: 1000");
+        printf("Valor minimo para blocos é 1000\n");
     }
 
     Bloco blocos_disco[n_blocos];
@@ -259,13 +250,13 @@ int main()
 
     Lista lista_blivres;
     inicializaLista(lista_blivres, n_blocos);
-    inicializaBlocos(blocos_disco, n_blocos, &lista_blivres, &raiz);
+    inicializaBlocos(blocos_disco, n_blocos, lista_blivres, raiz);
     char nomearquivo[NOMESARQDIR],bytes[8];
     int tamanho, pos,pos_bloco_livre,pos_no_dir,pos_bloco;
     strcpy(navegacao,"");
     do
     {
-        puts(navegacao);
+        printf("%s", navegacao);
         fflush(stdin);
         gets(comando);
         res = findInstruction(comando);
@@ -276,7 +267,7 @@ int main()
             case 2: //vi
                 printf("\nDigite o nome do Arquivo: ");
                 fflush(stdin);
-                gets(navegacao);
+                printf("%s", navegacao);
 
                 char inicio[7], aux[80];
                 for(i = 0; i < 6; i++)
