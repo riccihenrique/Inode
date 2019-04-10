@@ -4,6 +4,12 @@
 #include <string.h>
 #include <ctype.h>
 #include <time.h>
+struct Bloco
+{
+    char tipo;
+    struct Diretorio dir;
+    struct Inode ino;
+};
 #include <windows.h>
 #include "stack.h"
 #include "tadLista.h"
@@ -11,6 +17,8 @@
 
 #define NOMESARQDIR 16
 #define ITENSDIR
+
+
 
 void verificaArquivo(Bloco b, Bloco blocos_disco[], char nome_arq[], bool &flag, int &posb)
 {

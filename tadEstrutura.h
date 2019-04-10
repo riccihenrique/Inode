@@ -42,12 +42,7 @@ struct Inode
     struct IT it;
 };
 
-struct Bloco
-{
-    char tipo;
-    struct Diretorio dir;
-    struct Inode ino;
-};
+
 
 void inicializaBlocos(Bloco vet[], int n, Lista &l, Diretorio &raiz)
 {
