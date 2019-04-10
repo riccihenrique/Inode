@@ -21,7 +21,7 @@ typedef struct IS IS;
 
 struct ID
 {
-    int pos[10], tl;
+    int pos[25], tl;
 };
 typedef struct ID ID;
 
@@ -48,7 +48,7 @@ typedef struct Diretorio Diretorio;
 
 struct Inode
 {
-    char data[11], permissao[11], hora[10];
+    char data[11], permissao[11], hora[10], usuario[50], grupo[50];
     int tamanho, pos[5], tl;
     struct IS is;
     struct ID id;

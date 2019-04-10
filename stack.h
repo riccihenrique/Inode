@@ -33,16 +33,3 @@ void show(Stack s)
     while(!isEmpty(s))
         printf("%d\n",s.stack[s.top--]);
 }
-
-char procuraBloco(Stack s, int pos)
-{
-    char achou = 0;
-    int bloco;
-    while(!isEmpty(s) && !achou)
-    {
-        bloco = pop(&s);
-        if(pos == bloco)
-            achou = 1;
-    }
-    return achou;
-}

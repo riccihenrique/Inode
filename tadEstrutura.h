@@ -2,9 +2,9 @@ Diretorio criaDiretorio(int pos, char nome[], int pai, int raiz)
 {
     Diretorio dir;
     
-    strcpy(dir.nome,nome);
+    strcpy(dir.nome, nome);
     dir.dir_pai = pai;
-    dir.tl=0;
+    dir.tl = 0;
     dir.pos = pos;
     dir.dir_raiz = 0;
     return dir;
@@ -23,28 +23,66 @@ void inicializaBlocos(Bloco vet[], int tl)
     vet[0].dir = criaDiretorio(0, "/", 0, 0);
 }
 
-void pegarData_Hora(char hora[],char data[])
+Inode criaInode(int tamanho, char permicao[])
 {
-    char c1,c2;
-    _strdate(data);
-    c1 = data[3];
-    c2 = data[4];
-    data[3] = data[0];
-    data[4] = data[1];
-    data[0] = c1;
-    data[1] = c2;
-    _strtime(hora);
+    Inode inode;
+    inode.tamanho = tamanho;
+    strcpy(inode.data,"10/04/2019");
+    strcpy(inode.hora,"hora");
+    strcpy(inode.grupo, "FIPP");
+    strcpy(inode.usuario, "User");
+    strcpy(inode.permissao,permicao);
+    inode.tl = inode.is.tl = inode.id.tl = inode.it.tl = 0;
+    return inode;
 }
 
-Inode criaInode(int tamanho, char perm[])
+int verificaBlocoLivre(Queue l, int pos)
 {
-    Inode ino;
-    char data[10],hora[10];
-    pegarData_Hora(hora,data);
-    strcpy(ino.data,data);
-    strcpy(ino.hora,hora);
-    strcpy(ino.permissao,perm);
-    ino.tamanho = tamanho;
-    ino.tl=0;
-    ino.is.tl=ino.id.tl=ino.it.tl=0;
+    int i;
+
+    for(i = 0; i <= l.tl; i++)
+    {
+        Stack s = l.stack[i];
+        while(!isEmpty(s) && top(s) != pos)
+            pop(&s);
+        if(!isEmpty(s))
+            return i;              
+    }
+    return -1;
+}
+
+int getBlocoLivre(Queue l)
+{
+    int pos = -1;
+    if(!isEmpty(l.stack[0]))
+    {
+        pos = pop((&l.stack[l.tl]));
+        if(isEmpty(l.stack[l.tl]))
+           removeQueue(&l);
+    }    
+    return pos;
+}
+
+void BadBlock(Queue l, int pos_bloco, Bloco bloco[])
+{
+    int valor, pos_pilha = verificaBlocoLivre(l, pos_bloco);
+    if(pos_pilha > -1)
+    {
+        Stack backup, aux;
+        initStack(&aux);
+        backup = l.stack[pos_pilha];
+        while(!isEmpty(backup))
+        {
+            valor = pop(&backup);
+            if(valor != pos_bloco)
+                push(&aux, valor);
+        }
+
+        l.stack[pos_pilha] = aux;
+        if(isEmpty(l.stack[pos_pilha]))
+            if(pos_pilha == 0)
+                removeQueue(&l);
+    }
+
+    bloco[pos_bloco].tipo = 'B';
 }
