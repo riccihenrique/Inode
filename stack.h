@@ -1,19 +1,11 @@
-#define TFS 100
-
-struct Stack
-{
-    int top;
-    int stack[TFS];
-};
-
-void init(Stack &s)
+void initStack(Stack *s)
 { 
-    s.top = -1; 
+    (*s).top = -1; 
 }
 
 char isFull(Stack s)
 { 
-    return s.top == TFS-1;
+    return s.top == TF-1;
 }
 
 char isEmpty(Stack s)
@@ -21,14 +13,14 @@ char isEmpty(Stack s)
     return s.top == -1; 
 }
 
-void push(Stack &s, int info)
+void push(Stack *s, int info)
 { 
-    s.stack[++s.top] = info;
+    (*s).stack[++(*s).top] = info;
 }
 
-int pop(Stack &s)
+int pop(Stack *s)
 { 
-    return s.stack[s.top--]; 
+    return (*s).stack[(*s).top--]; 
 }
 
 int top(Stack s)
@@ -42,15 +34,15 @@ void show(Stack s)
         printf("%d\n",s.stack[s.top--]);
 }
 
-bool procuraBloco(Stack s, int pos)
+char procuraBloco(Stack s, int pos)
 {
-    bool achou = false;
+    char achou = 0;
     int bloco;
     while(!isEmpty(s) && !achou)
     {
-        bloco = pop(s);
+        bloco = pop(&s);
         if(pos == bloco)
-            achou = true;
+            achou = 1;
     }
     return achou;
 }
