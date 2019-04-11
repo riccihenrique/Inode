@@ -1,4 +1,4 @@
-#define TF 999
+#define TF 1230
 
 struct Stack
 {
@@ -34,22 +34,22 @@ typedef struct IT IT;
 struct Itens
 {
     int pos;
-    char nome[40];
+    char nome[50];
 };
 typedef struct Itens Itens;
 
 struct Diretorio
 {
     int tl, dir_pai,dir_raiz, pos;
-    char nome[60];
-    Itens itens[20];
+    char nome[50];
+    Itens itens[10];
 };
 typedef struct Diretorio Diretorio;
 
 struct Inode
 {
     char data[11], permissao[11], hora[10], usuario[50], grupo[50];
-    int tamanho, pos[5], tl;
+    int tamanho, pos[5], tl, cont_link_fisicos;
     struct IS is;
     struct ID id;
     struct IT it;

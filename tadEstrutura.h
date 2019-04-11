@@ -1,4 +1,4 @@
-Diretorio criaDiretorio(int pos, char nome[], int pai, int raiz)
+Diretorio criaDiretorio(int pos, char nome[], int pai)
 {
     Diretorio dir;
     
@@ -20,7 +20,7 @@ void inicializaBlocos(Bloco vet[], int tl)
     for(i = 0; i < 30; i++)
         vet[(rand() % tl - 2) + 2].tipo = 'B';
 
-    vet[0].dir = criaDiretorio(0, "/", 0, 0);
+    vet[0].dir = criaDiretorio(0, "/", 0);
 }
 
 Inode criaInode(int tamanho, char permicao[])
@@ -51,14 +51,14 @@ int verificaBlocoLivre(Queue l, int pos)
     return -1;
 }
 
-int getBlocoLivre(Queue l)
+int getBlocoLivre(Queue *l)
 {
     int pos = -1;
-    if(!isEmpty(l.stack[0]))
+    if(!isEmpty((*l).stack[0]))
     {
-        pos = pop((&l.stack[l.tl]));
-        if(isEmpty(l.stack[l.tl]))
-           removeQueue(&l);
+        pos = pop((&(*l).stack[(*l).tl]));
+        if(isEmpty((*l).stack[(*l).tl]))
+           removeQueue(&*l);
     }    
     return pos;
 }
@@ -85,4 +85,36 @@ void BadBlock(Queue l, int pos_bloco, Bloco bloco[])
     }
 
     bloco[pos_bloco].tipo = 'B';
+}
+
+int buscaDiretorio(Bloco bloco[], char nome[], int dir)
+{
+    int i;
+    do
+    {
+        i = 0;
+        
+        if(!strcmpi(nome, ".."))
+        	return bloco[dir].dir.dir_pai;
+        
+         if(!strcmpi(nome, "."))
+        	return dir;
+        if(bloco[dir].dir.tl - 1 == -1)
+        	return -1;
+        
+        while(i < bloco[dir].dir.tl - 1)
+        {
+            if(!strcmpi(bloco[dir].dir.itens[i].nome, nome))
+                return bloco[dir].dir.itens[i].pos; 
+            i++;
+                
+        }
+        if(!strcmpi(bloco[dir].dir.itens[i].nome, ""))
+            dir = bloco[dir].dir.itens[i].pos;
+        else  if(!strcmpi(bloco[dir].dir.itens[i].nome, nome))
+            return bloco[dir].dir.itens[i].pos;
+        else
+                return -1;
+
+    }while(dir != -1);
 }
