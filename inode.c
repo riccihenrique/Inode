@@ -11,8 +11,7 @@
 #include "tadEstrutura.h"
 
 char escolha(char comando[])
-{
-    
+{    
     if(!strcmpi(comando, "exit"))
         return 0;
     else
@@ -67,7 +66,8 @@ int andaCaminho(char entrada[], Bloco bloco[], int dir)
 	int i = 0, tl = 0;
 	char entradas[30][30];
     dir = strstr(entrada, "/");
-    if(dir <= 0)
+    
+	if(dir <= 0)
         return -1;
 
 	tl = 0;
@@ -92,13 +92,6 @@ int main()
     
     printf("Digite a quantidade de blocos desejada: ");
     scanf("%d", &num_blocos);
-
-    if(num_blocos < 1000)
-    {
-        num_blocos = 1000;
-        printf("A quantidade minima e de 1000 blocos\n");
-       // _sleep(2300);
-    }
 	
 	system("cls");
 	initQueue(&blocos_livres, bloco, num_blocos);
@@ -163,7 +156,7 @@ int main()
                             {
                                 pos = getBlocoLivre(&blocos_livres);
 
-                                bloco[j].ino.pos[bloco[j].ino.is.pos[bloco[j].ino.pos[bloco[j].ino.is.tl++]]] = pos;
+                                bloco[j].ino.pos[bloco[j].ino.id.pos[bloco[j].ino.pos[bloco[j].ino.id.tl++]]] = pos;
                                 bloco[pos].tipo = 'A';
                                 l++; i -= 10;
                             }
@@ -174,7 +167,7 @@ int main()
                                 {
                                     pos = getBlocoLivre(&blocos_livres);
 
-                                    bloco[j].ino.pos[bloco[j].ino.is.pos[bloco[j].ino.pos[bloco[j].ino.is.tl++]]] = pos;
+                                    bloco[j].ino.pos[bloco[j].ino.it.pos[bloco[j].ino.pos[bloco[j].ino.it.tl++]]] = pos;
                                     bloco[pos].tipo = 'A';
                                     l++; i -= 10;
                                 }
@@ -191,7 +184,21 @@ int main()
 
             break;
             case 2:
-
+				i = split(comando, aux_comando, i);
+				
+				
+				i = 0;
+				
+				while(i < bloco[dir_atual].dir.tl)
+				{
+					printf("%s ", bloco[dir_atual].dir.itens[i].nome);
+					if(!strcmpi(aux_comando, ""))
+					{
+						
+					}
+					printf("\n");
+					i++;
+				}
             break;
             case 3:
 
@@ -224,7 +231,7 @@ int main()
                 if(i == 10)
                     exit(-1);
                 
-                BadBlock(blocos_livres, i, bloco);
+                BadBlock(&blocos_livres, i, bloco);
             break;
             case 6: // mkdir
                 

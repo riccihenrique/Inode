@@ -63,14 +63,14 @@ int getBlocoLivre(Queue *l)
     return pos;
 }
 
-void BadBlock(Queue l, int pos_bloco, Bloco bloco[])
+void BadBlock(Queue *l, int pos_bloco, Bloco bloco[])
 {
-    int valor, pos_pilha = verificaBlocoLivre(l, pos_bloco);
+    int valor, pos_pilha = verificaBlocoLivre(*l, pos_bloco);
     if(pos_pilha > -1)
     {
         Stack backup, aux;
         initStack(&aux);
-        backup = l.stack[pos_pilha];
+        backup = (*l).stack[pos_pilha];
         while(!isEmpty(backup))
         {
             valor = pop(&backup);
@@ -78,10 +78,10 @@ void BadBlock(Queue l, int pos_bloco, Bloco bloco[])
                 push(&aux, valor);
         }
 
-        l.stack[pos_pilha] = aux;
-        if(isEmpty(l.stack[pos_pilha]))
+        (*l).stack[pos_pilha] = aux;
+        if(isEmpty((*l).stack[pos_pilha]))
             if(pos_pilha == 0)
-                removeQueue(&l);
+                removeQueue(&*l);
     }
 
     bloco[pos_bloco].tipo = 'B';
